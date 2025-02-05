@@ -70,20 +70,25 @@ int Robot::search_enemy(double enemy_x, double enemy_y)
 {
     static int count = 0, nearest = 0;
 
-    if (count < 100)
+    if (count < 100) //到超过数组大小时不再进行读取
     {
         enemy_manage[count].x = enemy_x;
         enemy_manage[count].y = enemy_y;
     
         double delta_current = fabs(m_x - enemy_x) + fabs(m_y - enemy_y);
         double delta_min = fabs(m_x - enemy_manage[nearest].x) + fabs(m_y - enemy_manage[nearest].y);
-        if (delta_current < delta_min)
+        if (delta_current < delta_min) // 比较远近
             nearest = count;
 
         count++;
         return nearest;
     }
-    else exit(1);
+    else
+    {
+        std::cout << "超出数组大小" << std::endl;
+        exit(1);
+    } 
+    
     
 }
 
@@ -97,10 +102,12 @@ void Robot::shoot_enemy(int nearest)
     double transform_m_y = m_x*sin(M_PI/180.0*m_direction) + m_y*cos(M_PI/180.0*m_direction);
     double transform_nearest_x = enemy_manage[nearest].x*cos(M_PI/180.0*m_direction) - enemy_manage[nearest].y*sin(M_PI/180.0*m_direction);
     double transform_nearest_y = enemy_manage[nearest].x*sin(M_PI/180.0*m_direction) + enemy_manage[nearest].y*cos(M_PI/180.0*m_direction);
+    
     std::cout << "所需控制操作:[";
     double delta_x = fabs(transform_m_x-transform_nearest_x);
     double delta_y = fabs(transform_m_y-transform_nearest_y);
 
+    //判断enemy是否在robot正前或正后方
     if (delta_x < 1e-9)
     {
         if (transform_m_y > transform_nearest_y)
@@ -108,7 +115,9 @@ void Robot::shoot_enemy(int nearest)
     }
     else
     {
-        if (delta_y > 1e-9)
+        //判断enemy是否在robot正左或正右方
+        //不在正左或正右，则先移动，后转向
+        if (delta_y > 1e-9) 
         {
         if (transform_m_y > transform_nearest_y)
             std::cout << "s ";
@@ -153,7 +162,6 @@ int main()
             nearest = robot.search_enemy(enemy_x, enemy_y);
             robot.shoot_enemy(nearest);
         }
-        
     }
     return 0;
 }

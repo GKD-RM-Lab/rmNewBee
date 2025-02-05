@@ -16,8 +16,9 @@ public:
 
 void Robot::Robot_set(char operate, int number)
 {
+    //对于s和w，用三角函数求出移动后的坐标。a和d为得出新方向
     switch (operate)
-    {
+    {   
         case 'w':
             m_x += number*sin(M_PI/180.0*m_direction);
             m_y += number*cos(M_PI/180.0*m_direction);
@@ -30,7 +31,7 @@ void Robot::Robot_set(char operate, int number)
             m_direction = (m_direction + 90)%360;
             break;
         case 'a':
-            m_direction = (m_direction - 90 + 360)%360;
+            m_direction = (m_direction - 90 + 360)%360; //右转90即左转270
             break;
         default:
             std::cout << "输入错误" << std::endl;
@@ -40,6 +41,7 @@ void Robot::Robot_set(char operate, int number)
 
 void Robot::location_direction_outpot()
 {
+    //将角度于方位进行对照，输出访问和坐标
     std::string direction("上");
     if (m_direction == 90)
         direction = "右";
@@ -55,13 +57,14 @@ void Robot::location_direction_outpot()
 
 int main()
 {
-    char operate;
-    int number;
+    char operate; // 定义一个char变量来存储第一个指令
+    int number = 0; // 定义int变量来存储移动距离
     Robot robot;
 
     while (true)
     {
         std::cin >> operate;
+        //当char变量为d或a时不进行number的赋值
         if (operate == 'w' || operate == 's')
         {
             std::cin >> number;
