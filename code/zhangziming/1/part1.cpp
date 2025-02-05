@@ -11,8 +11,7 @@ public:
     Robot():m_x(0), m_y(0), m_direction(0) {}
     ~Robot() {}
     void Robot_set(char operate, int number = 0);
-    void Robot_outpot();
-    void Robot_shooting ();
+    void location_direction_outpot();
 };
 
 void Robot::Robot_set(char operate, int number)
@@ -39,7 +38,7 @@ void Robot::Robot_set(char operate, int number)
     }
 }
 
-void Robot::Robot_outpot()
+void Robot::location_direction_outpot()
 {
     std::string direction("上");
     if (m_direction == 90)
@@ -71,7 +70,7 @@ int main()
         else
             robot.Robot_set(operate);
 
-        robot.Robot_outpot();
+        robot.location_direction_outpot();
     }
 
     return 0;
