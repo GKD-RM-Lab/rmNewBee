@@ -108,11 +108,14 @@ void Robot::shoot_enemy(int nearest)
     }
     else
     {
+        if (delta_y > 1e-9)
+        {
         if (transform_m_y > transform_nearest_y)
             std::cout << "s ";
         else
             std::cout << "w ";
         std::cout << static_cast<int>(std::round(delta_y)) << ",";
+        }
 
         if (transform_m_x > transform_nearest_x)
             std::cout << "a";
