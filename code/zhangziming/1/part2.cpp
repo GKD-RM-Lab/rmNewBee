@@ -20,7 +20,7 @@ public:
     {
         enemy_manage = new enemy[100];
     }
-    ~Robot() {}
+    ~Robot() {delete[] enemy_manage;}
     void Robot_set(char operate, int number = 0);
     void location_direction_outpot();
     int search_enemy(double enemy_x, double enemy_y);
