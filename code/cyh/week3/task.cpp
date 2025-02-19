@@ -4,11 +4,11 @@ Task::Task(int id, std::string description, int importance){
     taskid = id;
     taskdescrtiption = description;
     taskimportance = importance;
-    taskstatus = "Î´Ö´ÐÐ";
+    taskstatus = "æœªæ‰§è¡Œ";
 }
 
 void Task::execute() const{
-    taskstatus = "ÒÑÖ´ÐÐ";
+    taskstatus = "å·²æ‰§è¡Œ";
 }
 
 int Task::getTaskID() const{

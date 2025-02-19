@@ -9,13 +9,13 @@ void TaskScheduler::deleteRobot(std::string robotname){
     robots.erase(robotname);
 }
 
-Robot TaskScheduler::getRobot(std::string robotname){
+Robot& TaskScheduler::getRobot(std::string robotname){
     std::map<std::string, Robot>::iterator it = robots.find(robotname);
     if (it != robots.end()) {
         return it->second;
     }else{
-        std::cout << "û�ҵ�" << std::endl;
-        return Robot("");
+        std::cout << "没找到" << std::endl;
+        return robots["默认"];
     }
 }
 

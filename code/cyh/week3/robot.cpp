@@ -6,20 +6,12 @@ Robot::Robot(std::string name){
     robotname = name;
 }
 
-Robot::~Robot(){
-    for(auto task : tasks){
-        if(task.getTaskStatus() == "Î´Ö´ÐÐ")
-        {
-            std::cout << "Î´Íê³ÉÈÎÎñID: " << task.getTaskID() << ",ÃèÊö: " << task.getTaskDescription() << std::endl;
-        }
-    }    
-}
 
 void Robot::addTask(int id, std::string description, int importance){
     tasks.insert(Task(id, description, importance));
 }
 
-void Robot::executeTasks() const{
+void Robot::executeTasks()  {
     if (!tasks.empty()) {
         auto it = tasks.rbegin();
         it->execute();
@@ -27,11 +19,13 @@ void Robot::executeTasks() const{
 }
 
 
-void Robot::displayTasks() const{
-    for(auto it = tasks.rbegin(); it != tasks.rend(); it--){
-        
-        
-        std::cout << "ÈÎÎñID: " << it->getTaskID() << ", ÃèÊö: " << it->getTaskDescription() << ", ×´Ì¬: " << it->getTaskStatus() << std::endl;
+void Robot::displayTasks()  {
+    if (tasks.empty()) {
+        std::cout << "ä»»åŠ¡åˆ—è¡¨ä¸º" << std::endl;
+        return;
+    }
+    for(auto it = tasks.rbegin(); it != tasks.rend(); it++) {
+        std::cout << "ä»»åŠ¡ID: " << it->getTaskID() << ", æè¿°: " << it->getTaskDescription() << ", çŠ¶æ€: " << it->getTaskStatus() << std::endl;
     }
 }
 

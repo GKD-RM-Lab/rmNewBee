@@ -5,45 +5,63 @@
 using namespace std;
 
 int main(){
-    cout << "ÇëÊäÈëÖ¸Áî" << endl;
+    cout << "è¯·è¾“å…¥æŒ‡ä»¤" << endl;
     TaskScheduler taskscheduler;
     
-    while(1){
+    while(true){
         string command;
         cin >> command;
         string robotname;
-        if(command == "Ìí¼Ó»úÆ÷ÈË"){           
+
+        if(command == "æ·»åŠ æœºå™¨äºº"){           
             cin >> robotname;
             taskscheduler.addRobot(robotname);
-        }else if(command == "Ìí¼ÓÈÎÎñ"){
+            
+        } else if(command == "æ·»åŠ ä»»åŠ¡"){
             int id;
             string description;
             int importance;
-            cin >> robotname >> id >> description >> importance;
-            Robot(robotname).addTask(id, description, importance);
-        }else if(command == "³·ÏúÈÎÎñ"){
+
+            cin >> robotname >> id;
+            cin.ignore();
+            getline(cin, description);
+            cin >> importance;
+
+            Robot &robot = taskscheduler.getRobot(robotname);
+            robot.addTask(id, description, importance);
+            
+        } else if(command == "æ’¤é”€ä»»åŠ¡"){
             cin >> robotname;
-            Robot(robotname).deleteTask();
-        }else if(command == "Ö´ĞĞÈÎÎñ"){
+            Robot &robot = taskscheduler.getRobot(robotname);
+            robot.deleteTask();
+            
+        } else if(command == "æ‰§è¡Œä»»åŠ¡"){
             cin >> robotname;
-            Robot(robotname).executeTasks();
-        }else if(command == "É¾³ı»úÆ÷ÈË"){
+            Robot &robot = taskscheduler.getRobot(robotname);
+            robot.executeTasks();
+            
+        } else if(command == "åˆ é™¤æœºå™¨äºº"){
             cin >> robotname;
             taskscheduler.deleteRobot(robotname);
-        }else if(command == "²éÑ¯ÈÎÎñ"){
+            
+        } else if(command == "æŸ¥è¯¢ä»»åŠ¡"){
             cin >> robotname;
-            Robot(robotname).displayTasks();
-        }else if(command == "»ñÈ¡»úÆ÷ÈËÃû³ÆÁĞ±í"){
-            taskscheduler.getRobotsName();
-        }else if(command == "ÍË³ö"){
-            cout << "ÍË³ö" << endl;
-            return 0;
-        }else{
-            cout << "ÎŞĞ§(Î´Öª)µÄÃüÁî" << endl;
-            continue;
-        }
-    }
-    cout << "½áÊø" << endl;
+            Robot &robot = taskscheduler.getRobot(robotname);
+            robot.displayTasks();
 
+        } else if(command == "è·å–æœºå™¨äººåç§°åˆ—è¡¨"){
+            for (const string& name : taskscheduler.getRobotsName()) {
+                cout << name << endl;
+            }
+        } else if(command == "é€€å‡º"){
+            cout << "æˆåŠŸé€€å‡º" << endl;
+            return 0;
+        } else{
+            cout << "æ— æ•ˆ(æœªçŸ¥)çš„å‘½ä»¤" << endl;
+            continue; 
+        }
+
+        cout << "æ‰§è¡ŒæˆåŠŸ" << endl;
+    }
     return 0;
 }

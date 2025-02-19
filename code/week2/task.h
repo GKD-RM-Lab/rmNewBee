@@ -13,9 +13,9 @@ private:
 public:
     Task(int id = -1, std::string desc = "");
     void execute();
-    int getID() const;
-    std::string getDescription() const;
-    std::string getStatus() const;
+    int getID()  ;
+    std::string getDescription()  ;
+    std::string getStatus()  ;
 };
 
 #endif // TASK_H

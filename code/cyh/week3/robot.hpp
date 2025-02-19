@@ -13,10 +13,10 @@ class Robot{
     public:
         Robot() : robotname("") {};
         Robot(std::string name);
-        ~Robot();
+
         void addTask(int id, std::string description, int importance = 0);
-        void executeTasks() const;
-        void displayTasks() const;
+        void executeTasks();
+        void displayTasks();
         void deleteTask();
 };
 

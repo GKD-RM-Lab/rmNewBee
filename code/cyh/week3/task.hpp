@@ -6,9 +6,9 @@
 class Task{
     private:
         int taskid;
-        mutable std::string taskdescrtiption;
+        std::string taskdescrtiption;
         mutable std::string taskstatus;
-        mutable int taskimportance;
+        int taskimportance;
     public:
         Task(int id, std::string description, int importance);
         void execute() const;

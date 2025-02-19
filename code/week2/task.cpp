@@ -7,17 +7,17 @@ void Task::execute()
     status = "ÒÑÖ´ÐÐ";
 }
 
-int Task::getID() const
+int Task::getID()  
 {
     return taskID;
 }
 
-std::string Task::getDescription() const
+std::string Task::getDescription()  
 {
     return description;
 }
 
-std::string Task::getStatus() const
+std::string Task::getStatus()  
 {
     return status;
 }
