@@ -6,8 +6,8 @@ CXXFLAGS = -std=c++11 -g
 
 # 定义目标文件和依赖文件
 TARGET = robot
-SOURCES = main.cpp robot.cpp task.cpp
-HEADERS = robot.hpp task.hpp
+SOURCES = main.cpp robot.cpp task.cpp taskscheduler.cpp
+HEADERS = robot.hpp task.hpp taskscheduler.hpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # 默认规则
