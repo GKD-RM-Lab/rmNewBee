@@ -21,30 +21,30 @@ int main()
         {
             std::string robot_name;
             std::cin >> robot_name;
-            auto it = obj.interrogate_robot(robot_name);
-            if (!obj.is_end(it))
+            Robot* robot_ptr = obj.interrogate_robot(robot_name);
+            if (robot_ptr)
             {
                 std::string task_distription;
                 int task_ID;
                 std::cin >> task_ID >> task_distription;
-                (it->second).add_task(task_ID, task_distription);
+                robot_ptr->add_task(task_ID, task_distription);
             }
         }
         else if (command == "撤销任务")
         {
             std::string robot_name;
             std::cin >> robot_name;
-            auto it = obj.interrogate_robot(robot_name);
-            if (!obj.is_end(it))
-                (it->second).quash_task();
+            Robot* robot_ptr = obj.interrogate_robot(robot_name);
+            if (robot_ptr)
+                robot_ptr->quash_task();
         }
         else if (command == "执行任务")
         {
             std::string robot_name;
             std::cin >> robot_name;
-            auto it = obj.interrogate_robot(robot_name);
-            if (!obj.is_end(it))
-                (it->second).execute_task();
+            Robot* robot_ptr = obj.interrogate_robot(robot_name);
+            if (robot_ptr)
+                robot_ptr->execute_task();
         }
         else if (command == "删除机器人")
         {
@@ -56,12 +56,16 @@ int main()
         {
             std::string robot_name;
             std::cin >> robot_name;
-            auto it = obj.interrogate_robot(robot_name);
-            if (!obj.is_end(it))
-                (it->second).show_task();
+            Robot* robot_ptr = obj.interrogate_robot(robot_name);
+            if (robot_ptr)
+                robot_ptr->show_task();
         }
         else if (command == "获取机器人名称列表")
-            obj.get_list();
+        {
+            auto name_list = obj.get_list();
+            for (const auto& name : name_list)
+                std::cout << name << std::endl;
+        }
         else if (command == "退出")
             break;
         else

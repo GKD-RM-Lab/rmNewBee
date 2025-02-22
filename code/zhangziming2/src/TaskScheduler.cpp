@@ -10,14 +10,9 @@ void TaskScheduler::add_robot(std::string robot_name)
     robot_list.emplace(robot_name, robot_name); 
 }
 
-bool TaskScheduler::is_end(std::map<std::string, Robot>::const_iterator it) const
-{
-    return (it == robot_list.end());
-}
-
 void TaskScheduler::delete_robot(std::string robot_name)
 {
-    if (is_end(robot_list.find(robot_name)))
+    if (robot_list.find(robot_name) == robot_list.end())
         std::cout << "未查询到该机器人" << std::endl;
     else
     {
@@ -26,22 +21,22 @@ void TaskScheduler::delete_robot(std::string robot_name)
     }
 }
 
-std::map<std::string, Robot>::iterator TaskScheduler::interrogate_robot(std::string robot_name)
+Robot* TaskScheduler::interrogate_robot(std::string robot_name)
 {
     auto find = robot_list.find(robot_name);
 
-    if (is_end(find))
+    if (find == robot_list.end())
     {
         std::cout << "未查询到该机器人" << std::endl;
-        return robot_list.end();
+        return nullptr;
     }
 
-    return find;
+    return &(find->second);
 }
 
-std::vector<std::string>& TaskScheduler::get_list() const
+std::vector<std::string> TaskScheduler::get_list() const
 {
-    static std::vector<std::string> name_list;
+    std::vector<std::string> name_list;
     name_list.reserve(10);
 
     if (robot_list.empty())

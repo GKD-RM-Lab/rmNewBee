@@ -8,7 +8,6 @@ class Robot
 private:
     std::string robot_name;
     std::vector<task> manager;
-    int task_count;
     int execute_count;
 public:
     Robot();
