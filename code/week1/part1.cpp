@@ -4,17 +4,17 @@ using namespace std;
 
 int main()
 {
-    int x = 0, y = 0;  // åˆå§‹ä½ç½®
-    int direction = 0; // åˆå§‹æ–¹å‘ä¸ºä¸Šï¼ˆ0Â°ï¼‰
+    int x = 0, y = 0;  // ³õÊ¼Î»ÖÃ
+    int direction = 0; // ³õÊ¼·½ÏòÎªÉÏ£¨0¡ã£©
 
     char command;
     int distance;
     while (true)
     {
-        cin >> command; // è¾“å…¥å‘½ä»¤
+        cin >> command; // ÊäÈëÃüÁî
 
         if (command == 'w')
-        { // å‰è¿›
+        { // Ç°½ø
             cin >> distance;
             if (direction == 0)
             {
@@ -34,7 +34,7 @@ int main()
             }
         }
         else if (command == 's')
-        { // åŽé€€
+        { // ºóÍË
             cin >> distance;
             if (direction == 0)
             {
@@ -54,29 +54,29 @@ int main()
             }
         }
         else if (command == 'a')
-        { // é€†æ—¶é’ˆæ—‹è½¬
+        { // ÄæÊ±ÕëÐý×ª
             direction = (direction - 90 + 360) % 360;
         }
         else if (command == 'd')
-        { // é¡ºæ—¶é’ˆæ—‹è½¬
+        { // Ë³Ê±ÕëÐý×ª
             direction = (direction + 90) % 360;
         }
-        cout << "ä½ç½®: (" << x << ", " << y << "), æ–¹å‘: ";
+        cout << "Î»ÖÃ: (" << x << ", " << y << "), ·½Ïò: ";
         if (direction == 0)
         {
-            cout << "ä¸Š" << endl;
+            cout << "ÉÏ" << endl;
         }
         else if (direction == 90)
         {
-            cout << "å³" << endl;
+            cout << "ÓÒ" << endl;
         }
         else if (direction == 180)
         {
-            cout << "ä¸‹" << endl;
+            cout << "ÏÂ" << endl;
         }
         else if (direction == 270)
         {
-            cout << "å·¦" << endl;
+            cout << "×ó" << endl;
         }
     }
 
