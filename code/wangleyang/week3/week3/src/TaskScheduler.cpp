@@ -19,6 +19,6 @@ void scheduler::gainRobot(){
     for(int i=0;i<names.size();i++){
         std::cout<<names[i]<<std::endl;
     }
-
+    
 }
 

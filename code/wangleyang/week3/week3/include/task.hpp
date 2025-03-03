@@ -4,14 +4,10 @@ class task{
     private:
     int ID;
     std::string DESCRIPTION;
-    mutable std::string STATUS;
-    int x;
+    std::string STATUS;
     public:
-    bool operator<(const task& other)const{
-        return x<other.x;
-    }
-    task(int id=0,const std::string& description=" ",int X=0);
-    void execute() const;
+    task(int id=0,const std::string& description=" ");
+    void execute();
     int getID() const;
     std::string getdescription() const;
     std::string getstatus() const;

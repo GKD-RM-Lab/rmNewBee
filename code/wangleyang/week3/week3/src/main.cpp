@@ -6,7 +6,6 @@ int main(){
     scheduler Scheduler;
     string commend;
     string nameRobot;
-    int targettask;
     while (true){
     cout << "Please enter the command"<<endl;
     cin>>commend;
@@ -17,9 +16,9 @@ int main(){
     else if(commend=="添加任务"){
         int id;
         string description;
-        cin>>nameRobot>>id>>description>>targettask;
+        cin>>nameRobot>>id>>description;
         auto it=Scheduler.getRobot(nameRobot);
-        it->addtask(id, description,targettask);
+        it->addtask(id, description);
     }
     if(commend=="撤销任务"){
         cin>>nameRobot;
