@@ -2,27 +2,30 @@
 #include "robot.hpp"
 robot::robot(std::string name):NAME(name){}
 robot::~robot(){
-    for(int i=0;i<tasks.size();i++){
-    if(tasks[i].getstatus()=="待执行"){
-        std::cout<<"未执行任务ID: "<<tasks[i].getID()<<", 描述："<<tasks[i].getdescription()<<std::endl;
+    for(auto it=tasks.begin();it!=tasks.end();it++){
+        const task& t=*it;
+    if(t.getstatus()=="待执行"){
+        std::cout<<"未执行任务ID: "<<t.getID()<<", 描述："<<t.getdescription()<<std::endl;
     }
     }
 }
-void robot::addtask(int id, const std::string& description){
-    tasks.emplace_back(id,description);
+void robot::addtask(int id, const std::string& description,int x){
+    task newtask(id,description,x);
+    tasks.insert(newtask);
 }
 void robot::executetasks(){
-    for(int i=0;i<tasks.size();i++){
-    tasks[i].execute();
+    auto it=tasks.end();
+    it--;
+    it->execute();
     }
-}
-
 void robot::displaytasks(){
-    for(int i=0;i<tasks.size();i++){
-        std::cout<<"任务ID:"<<tasks[i].getID()<<", 描述："<<tasks[i].getdescription()<<", 状态："<<tasks[i].getstatus()<<std::endl;
+    for(auto it=tasks.begin();it!=tasks.end();it++){
+        const task& t=*it;
+        std::cout<<"任务ID:"<<t.getID()<<", 描述："<<t.getdescription()<<", 状态："<<t.getstatus()<<std::endl;
     }
 }
 
 void robot::remove(){
-    tasks.pop_back();
+    auto it=tasks.begin();
+    tasks.erase(it);
 }
