@@ -1,0 +1,3 @@
+/home/nyiuu/workplace/GKD/rmNewBee/code/cyh/week4/build/CMakeFiles/TaskManager.dir
+/home/nyiuu/workplace/GKD/rmNewBee/code/cyh/week4/build/CMakeFiles/edit_cache.dir
+/home/nyiuu/workplace/GKD/rmNewBee/code/cyh/week4/build/CMakeFiles/rebuild_cache.dir
