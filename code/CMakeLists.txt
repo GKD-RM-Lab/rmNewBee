@@ -3,7 +3,7 @@ project(newbee)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CODE_PATH week3)
+set(CODE_PATH week4)
 
 file(GLOB_RECURSE SRC_FILE ${CODE_PATH}/*.cpp)
 
