@@ -13,10 +13,10 @@ void task::callback(int msg)
     *p1 = msg;
 }
 
-void task::monitor(std::atomic<int>& pre, std::atomic<int>& sub)
+void task::monitor(std::atomic<int>* pre, std::atomic<int>* sub)
 {
-    p2 = &pre;
-    p1 = &sub;
+    p2 = pre;
+    p1 = sub;
 }
 
 void task::stop(std::thread& t, int i)

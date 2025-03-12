@@ -37,6 +37,7 @@ int main()
         }
         else if(command == "退出")
         {
+            manager.stop();
             t1.join();
             break;
         }

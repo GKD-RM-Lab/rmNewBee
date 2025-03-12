@@ -3,16 +3,16 @@
 #include <chrono>
 #include <iostream>
 
+manage::manage()
+:out(0)
+{
+    order.reserve(100);
+    t.reserve(100);
+}
+
 void manage::add(int key, int kind)
 {
-    std::lock_guard<std::mutex> lock(mtx);
     size_t location = task_storage.size();
-
-    if(location >= a.size())
-    {
-        std::cerr << "任务数量超过限制!" << std::endl;
-        return;
-    }
 
     std::shared_ptr<task> temp;
     switch(kind) 
@@ -32,25 +32,31 @@ void manage::add(int key, int kind)
     }
 
     if(location > 0)
+    {
+        a.emplace_back(new std::atomic<int>(0));
         temp->monitor(a[location-1], a[location]);
+    }
     else
-        temp->monitor(out, a[location]);
+    {
+        a.emplace_back(new std::atomic<int>(0));
+        temp->monitor(&out, a[location]);
+    }
 
     task_storage.emplace(key, temp);
+    order.emplace_back(key);
     t.emplace_back(&task::run, temp);
 }
 
 void manage::monitor_out()
 {
-    while(t.size())
+    while(button)
     {
-        mtx.lock();
+        std::lock_guard<std::mutex> lock(mtx);
         if(out.load())
         {
             std::cout << "out=" << out.load() << std::endl << std::flush;
             out = 0;
         };
-        mtx.unlock();
     }
 }
 
@@ -58,13 +64,14 @@ void manage::pop()
 {
     if(!task_storage.empty())
     {
-        auto temp = std::prev(task_storage.end());
-        (temp->second)->stop(t.back(), temp->first);
-        mtx.lock();
-        t.pop_back();
+        int location = order.back();
+        auto it = task_storage.find(location);
+
+        it->second->stop(t.back(), location);
         a[task_storage.size()-1] = 0;
-        task_storage.erase(temp);
-        mtx.unlock();
+        t.pop_back();
+        task_storage.erase(location);
+        order.pop_back();
     }
 }
 
@@ -76,13 +83,23 @@ void manage::f(int key, int msg)
     if (it == task_storage.end())
         std::cout << "未找到" << std::endl;
     else
-        (it->second)->callback(msg); 
+        it->second->callback(msg); 
+}
+
+void manage::stop()
+{
+    button = false;
 }
 
 manage::~manage()
 {
+    button = false;
     int i = 0;
-    for(auto it : task_storage)
-        it.second->stop(t[i++]);
+    for(auto& it : task_storage)
+        (it.second)->stop(t[i++]);
+    
+    for(auto& it : a)
+        delete it;
+
     std::cout << "任务全部结束" << std::endl;
 }
