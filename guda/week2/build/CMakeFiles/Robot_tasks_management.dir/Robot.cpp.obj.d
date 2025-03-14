@@ -145,4 +145,9 @@ CMakeFiles/Robot_tasks_management.dir/Robot.cpp.obj: \
  E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/basic_ios.tcc \
  E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/ostream.tcc \
  E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/istream \
- E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/istream.tcc
+ E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/istream.tcc \
+ E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/vector \
+ E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_uninitialized.h \
+ E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_vector.h \
+ E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_bvector.h \
+ E:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/vector.tcc
