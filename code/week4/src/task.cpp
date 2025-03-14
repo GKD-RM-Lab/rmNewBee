@@ -6,7 +6,7 @@
 std::mutex mtx;
 
 task::task(int key)
-:key(key), is_running(false), p1(nullptr), p2(nullptr) {}
+:key(key), is_running(true), p1(nullptr), p2(nullptr) {}
 
 void task::callback(int msg)
 {
@@ -38,22 +38,17 @@ task1::task1(int key)
 
 void task1::run()
 {
-    if(!is_running.load())
+    while(is_running.load())
     {
-        is_running = true;
-        while(is_running.load())
+        if(p1->load())
         {
-            mtx.lock();
-            if(p1->load())
-            {
-                *p2 = p1->exchange(0);
-                p2->fetch_add(1);
-                std::cout << "write {task1}-{" << key << "}: " <<
-                "{" << p2->load() << "}" << std::endl << std::flush;
-            }
-            mtx.unlock();
-        }    
-    }   
+            std::lock_guard<std::mutex> lock(mtx);
+            *p2 = p1->exchange(0);
+            p2->fetch_add(1);
+            std::cout << "write {task1}-{" << key << "}: " <<
+            "{" << p2->load() << "}" << std::endl << std::flush;
+        }
+    }
 }
 
 ////////////////////////task2
@@ -68,20 +63,16 @@ void task2::callback(int msg)
 
 void task2::run()
 {
-    if(!is_running.load())
+    while(is_running.load())
     {
-        is_running = true;
-        while(is_running.load())
+        if(p1->load())
         {
             mtx.lock();
-            if(p1->load())
-            {
-                *p2 = (*p1)*k;
-                *p1 = 0;
-                std::cout << "write {task2}-{" << key << "}: " <<
-                "{" << p2->load() << "}" << std::endl << std::flush;
-            }
+            *p2 = (*p1)*k;
+            std::cout << "write {task2}-{" << key << "}: " <<
+            "{" << p2->load() << "}" << std::endl << std::flush;
             mtx.unlock();
+            *p1 = 0;
         }
     }
 }
@@ -91,23 +82,18 @@ task3::task3(int key)
 
 void task3::run()
 {
-    if(!is_running.load())
+    while(is_running.load())
     {
-        is_running = true;
-        while(is_running.load())
+        if(p1->load())
         {
-            mtx.lock();
-            if(p1->load())
-            {
-                int t = p1->load();
-                *p1 = 0;
-                *p2 = t;
-                std::this_thread::sleep_for(std::chrono::milliseconds(1));
-                *p2 += 1;
-                std::cout << "write {task3}-{" << key << "}: " <<
-                "{" << p2->load() << "}" << std::endl << std::flush;
-            }
-            mtx.unlock();
+            int t = p1->load();
+            *p1 = 0;
+            std::lock_guard<std::mutex> lock(mtx);
+            *p2 = t;
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            *p2 += 1;
+            std::cout << "write {task3}-{" << key << "}: " <<
+            "{" << p2->load() << "}" << std::endl << std::flush;
         }
     }
 }

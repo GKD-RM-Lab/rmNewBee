@@ -51,10 +51,12 @@ void manage::monitor_out()
 {
     while(button)
     {
-        std::lock_guard<std::mutex> lock(mtx);
         if(out.load())
         {
-            std::cout << "out=" << out.load() << std::endl << std::flush;
+            mtx.lock();
+            std::cout << "out=" << out.load() <<
+            std::endl << std::flush;
+            mtx.unlock();
             out = 0;
         };
     }
@@ -77,9 +79,8 @@ void manage::pop()
 
 void manage::f(int key, int msg)
 {   
-    mtx.lock();
     auto it = task_storage.find(key);
-    mtx.unlock();
+
     if (it == task_storage.end())
         std::cout << "未找到" << std::endl;
     else
@@ -93,10 +94,9 @@ void manage::stop()
 
 manage::~manage()
 {
-    button = false;
     int i = 0;
-    for(auto& it : task_storage)
-        (it.second)->stop(t[i++]);
+    for(int it : order)
+        task_storage.find(it)->second->stop(t[i++]);
     
     for(auto& it : a)
         delete it;
