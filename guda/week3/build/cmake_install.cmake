@@ -1,4 +1,4 @@
-# Install script for directory: E:/code/gkd/rmNewBee/rmNewBee/guda/week3/src
+# Install script for directory: E:/code/gkd/rmNewBee/rmNewBee/guda/week3
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

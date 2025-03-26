@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef ROBOT_H
 #define ROBOT_H
 #include "Task.h"

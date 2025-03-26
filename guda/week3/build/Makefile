@@ -56,7 +56,7 @@ RM = F:\Cmake\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = E:\code\gkd\rmNewBee\rmNewBee\guda\week3\src
+CMAKE_SOURCE_DIR = E:\code\gkd\rmNewBee\rmNewBee\guda\week3
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = E:\code\gkd\rmNewBee\rmNewBee\guda\week3\build
@@ -135,101 +135,101 @@ TaskScheduler/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/build
 .PHONY : TaskScheduler/fast
 
-Robot.obj: Robot.cpp.obj
-.PHONY : Robot.obj
+src/Robot.obj: src/Robot.cpp.obj
+.PHONY : src/Robot.obj
 
 # target to build an object file
-Robot.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/Robot.cpp.obj
-.PHONY : Robot.cpp.obj
+src/Robot.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/Robot.cpp.obj
+.PHONY : src/Robot.cpp.obj
 
-Robot.i: Robot.cpp.i
-.PHONY : Robot.i
+src/Robot.i: src/Robot.cpp.i
+.PHONY : src/Robot.i
 
 # target to preprocess a source file
-Robot.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/Robot.cpp.i
-.PHONY : Robot.cpp.i
+src/Robot.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/Robot.cpp.i
+.PHONY : src/Robot.cpp.i
 
-Robot.s: Robot.cpp.s
-.PHONY : Robot.s
+src/Robot.s: src/Robot.cpp.s
+.PHONY : src/Robot.s
 
 # target to generate assembly for a file
-Robot.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/Robot.cpp.s
-.PHONY : Robot.cpp.s
+src/Robot.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/Robot.cpp.s
+.PHONY : src/Robot.cpp.s
 
-TaskScheduler.obj: TaskScheduler.cpp.obj
-.PHONY : TaskScheduler.obj
+src/Task.obj: src/Task.cpp.obj
+.PHONY : src/Task.obj
 
 # target to build an object file
-TaskScheduler.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/TaskScheduler.cpp.obj
-.PHONY : TaskScheduler.cpp.obj
+src/Task.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/Task.cpp.obj
+.PHONY : src/Task.cpp.obj
 
-TaskScheduler.i: TaskScheduler.cpp.i
-.PHONY : TaskScheduler.i
+src/Task.i: src/Task.cpp.i
+.PHONY : src/Task.i
 
 # target to preprocess a source file
-TaskScheduler.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/TaskScheduler.cpp.i
-.PHONY : TaskScheduler.cpp.i
+src/Task.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/Task.cpp.i
+.PHONY : src/Task.cpp.i
 
-TaskScheduler.s: TaskScheduler.cpp.s
-.PHONY : TaskScheduler.s
+src/Task.s: src/Task.cpp.s
+.PHONY : src/Task.s
 
 # target to generate assembly for a file
-TaskScheduler.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/TaskScheduler.cpp.s
-.PHONY : TaskScheduler.cpp.s
+src/Task.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/Task.cpp.s
+.PHONY : src/Task.cpp.s
 
-main.obj: main.cpp.obj
-.PHONY : main.obj
+src/TaskScheduler.obj: src/TaskScheduler.cpp.obj
+.PHONY : src/TaskScheduler.obj
 
 # target to build an object file
-main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/main.cpp.obj
-.PHONY : main.cpp.obj
+src/TaskScheduler.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/TaskScheduler.cpp.obj
+.PHONY : src/TaskScheduler.cpp.obj
 
-main.i: main.cpp.i
-.PHONY : main.i
+src/TaskScheduler.i: src/TaskScheduler.cpp.i
+.PHONY : src/TaskScheduler.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/TaskScheduler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/TaskScheduler.cpp.i
+.PHONY : src/TaskScheduler.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+src/TaskScheduler.s: src/TaskScheduler.cpp.s
+.PHONY : src/TaskScheduler.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/TaskScheduler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/TaskScheduler.cpp.s
+.PHONY : src/TaskScheduler.cpp.s
 
-task.obj: task.cpp.obj
-.PHONY : task.obj
+src/main.obj: src/main.cpp.obj
+.PHONY : src/main.obj
 
 # target to build an object file
-task.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/task.cpp.obj
-.PHONY : task.cpp.obj
+src/main.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/main.cpp.obj
+.PHONY : src/main.cpp.obj
 
-task.i: task.cpp.i
-.PHONY : task.i
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
 
 # target to preprocess a source file
-task.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/task.cpp.i
-.PHONY : task.cpp.i
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
 
-task.s: task.cpp.s
-.PHONY : task.s
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
 
 # target to generate assembly for a file
-task.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/task.cpp.s
-.PHONY : task.cpp.s
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TaskScheduler.dir\build.make CMakeFiles/TaskScheduler.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -241,18 +241,18 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... TaskScheduler
-	@echo ... Robot.obj
-	@echo ... Robot.i
-	@echo ... Robot.s
-	@echo ... TaskScheduler.obj
-	@echo ... TaskScheduler.i
-	@echo ... TaskScheduler.s
-	@echo ... main.obj
-	@echo ... main.i
-	@echo ... main.s
-	@echo ... task.obj
-	@echo ... task.i
-	@echo ... task.s
+	@echo ... src/Robot.obj
+	@echo ... src/Robot.i
+	@echo ... src/Robot.s
+	@echo ... src/Task.obj
+	@echo ... src/Task.i
+	@echo ... src/Task.s
+	@echo ... src/TaskScheduler.obj
+	@echo ... src/TaskScheduler.i
+	@echo ... src/TaskScheduler.s
+	@echo ... src/main.obj
+	@echo ... src/main.i
+	@echo ... src/main.s
 .PHONY : help
 
 

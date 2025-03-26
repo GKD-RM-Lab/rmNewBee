@@ -4,7 +4,7 @@
 # compile CXX with E:/mingw64/bin/c++.exe
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = @CMakeFiles/TaskScheduler.dir/includes_CXX.rsp
 
 CXX_FLAGS =  -fexec-charset=gbk
 
