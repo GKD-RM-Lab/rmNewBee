@@ -25,7 +25,7 @@ Robot* TaskScheduler::find_robot(const std::string &name)
 {
     if(Robotlist.count(name)==0)
     {
-        std::cerr <<"The robot " <<name <<" is not esisted." <<std::endl;
+        std::cerr <<"The robot " <<name <<" is not existed." <<std::endl;
         return nullptr;
     }
     return Robotlist[name];
