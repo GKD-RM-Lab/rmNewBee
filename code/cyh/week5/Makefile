@@ -2,7 +2,7 @@
 
 # Compiler settings
 CXX      := g++
-CXXFLAGS := -Wall -Wextra -std=c++11
+CXXFLAGS := -Wall -Wextra -std=c++17
 LDFLAGS  := 
 
 # Targets
@@ -13,16 +13,13 @@ TARGETS :=  client server
 SRC_CLIENT := client.cpp
 SRC_SERVER := server.cpp
 
-# Header files
-HEADERS := order.h
-
 # Default target (build all)
 all: $(TARGETS)
 
-client: $(SRC_CLIENT) $(HEADERS)
+client: $(SRC_CLIENT) 
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
-server: $(SRC_SERVER) $(HEADERS)
+server: $(SRC_SERVER)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 # Clean up
 clean:
