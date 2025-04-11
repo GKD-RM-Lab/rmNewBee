@@ -19,83 +19,102 @@ mutex coutMutex;
 // 读取菜单
 void loadMenu(const string& filename) {
     ifstream file(filename);
-    if (!file.is_open()) {
-        cerr << "无法打开文件 " << filename << endl;
-        return;
-    }
     for (string line; getline(file, line); ) {
         istringstream iss(line);
         int num;
-        if (iss >> num) {  // 自动读取第一个数字
+        if (iss >> num) {  // 自动读取第一个数字（制表符前的内容）
             menuItems.push_back(num);
         }
     }
 }
 
-int createSocket() {
-    lock_guard<mutex> lock(coutMutex);
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0) {
-        cerr << "创建socket失败: " << strerror(errno) << endl;
-    }
-    return sock;
-}
-
-bool configureSocket(int sock) {
-    lock_guard<mutex> lock(coutMutex);
-    timeval timeout{5, 0};
-    if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) < 0 ||
-        setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout)) < 0) {
-        cerr << "设置超时失败: " << strerror(errno) << endl;
-        return false;
-    }
-    return true;
-}
-
-bool connect(int sock, int customerId) {
-    lock_guard<mutex> lock(coutMutex);
-    sockaddr_in servAddr{};
-    memset(&servAddr, 0, sizeof(servAddr));
-    servAddr.sin_family = AF_INET;
-    servAddr.sin_port = htons(8080);
-    inet_pton(AF_INET, "127.0.0.1", &servAddr.sin_addr);
-
-    if (connect(sock, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0) {
-        lock_guard<mutex> lock(coutMutex);
-        cerr << "顾客 " << customerId << ": 连接服务器失败: " << strerror(errno) << endl;
-        close(sock);
-        sock = -1;
-        return false;
-    }
-    return true;
-}
-
 void placeOrder(int customerId) {
-    this_thread::sleep_for(chrono::seconds(1 + rand() % 5)); //睡眠1-5秒
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 开始下单" << endl;
+    }
+    this_thread::sleep_for(chrono::seconds(1 + rand() % 5)); // 睡眠1-5秒
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 睡眠结束" << endl;
+    }
 
     // 生成订单
     vector<int> order;
     int items = 1 + rand() % 3;
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 订单包含 " << items << " 个商品" << endl;
+    }
     for (int i = 0; i < items; ++i) {
         order.push_back(menuItems[rand() % menuItems.size()]);
     }
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 订单商品列表 " << endl;
+    }
 
     // 创建socket
-    int sock = createSocket();
-    if (sock < 0){
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 创建socket" << endl;
+    }
+    if (sock < 0) {
+        lock_guard<mutex> lock(coutMutex);
+        cerr << "顾客 " << customerId << ": 创建套接字失败" << endl;
         return;
     }
-    // 配置socket
-    if (!configureSocket(sock)) {
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 套接字创建成功" << endl;
+    }
+    //关闭端口  
+    int reuse = 1;
+    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
+        shutdown(sock, SHUT_RDWR);
+        close(sock);
+        {
+            lock_guard<mutex> lock(coutMutex);
+            cout << "顾客 " << customerId << ": 设置socket选项失败" << endl;
+        }
+        return;
+    }
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 设置socket选项成功" << endl;
+    }
+
+    // 设置连接超时（5秒）
+    timeval timeout{5, 0};
+    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 设置连接超时成功" << endl;
+    }
+
+    // 连接服务器
+    sockaddr_in servAddr{};
+    servAddr.sin_family = AF_INET;
+    servAddr.sin_port = htons(8080);
+    inet_pton(AF_INET, "127.0.0.1", &servAddr.sin_addr);
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 准备连接服务器" << endl;
+    }
+
+    if (connect(sock, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0) {
+        lock_guard<mutex> lock(coutMutex);
+        cerr << "顾客 " << customerId << ": 连接服务器失败 - " << strerror(errno) << endl;
+        shutdown(sock, SHUT_RDWR);
         close(sock);
         return;
     }
-    // 绑定端口并监听
-    if (!connect(sock, customerId)) {
-        close(sock);
-        return;
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 连接服务器成功" << endl;
     }
-    
 
     // 准备订单数据
     stringstream orderStream;
@@ -104,18 +123,39 @@ void placeOrder(int customerId) {
         orderStream << order[i];
     }
     string orderStr = orderStream.str();
-    send(sock, orderStr.c_str(), orderStr.size(), 0);
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 订单数据准备完毕: " << orderStr << endl;
+    }
+
+    // 发送订单
+    if (send(sock, orderStr.c_str(), orderStr.size(), 0) < 0) {
+        lock_guard<mutex> lock(coutMutex);
+        cerr << "顾客 " << customerId << ": 发送订单失败" << endl;
+        shutdown(sock, SHUT_RDWR);
+        close(sock);
+        return;
+    }
+    {
+        lock_guard<mutex> lock(coutMutex);
+        cout << "顾客 " << customerId << ": 订单发送成功" << endl;
+    }
 
     // 接收响应
     char buffer[1024] = {0};
     int bytesReceived = recv(sock, buffer, sizeof(buffer), 0);
-    if (bytesReceived <= 0) {
+    {
         lock_guard<mutex> lock(coutMutex);
-        cerr << "顾客 " << customerId << ": 未收到服务器响应" << endl;
-    } else {
+        if (bytesReceived <= 0) {
+            cerr << "顾客 " << customerId << ": 未收到服务器响应" << endl;
+        } else {
+            cout << "顾客 " << customerId << ": 订单 " << orderStr 
+                 << " " << (buffer[0] == '1' ? "成功" : "失败") << endl;
+        }
+    }
+    {
         lock_guard<mutex> lock(coutMutex);
-        cout << "顾客 " << customerId << ": 订单 " << orderStr 
-             << " " << (buffer[0] == '1' ? "成功" : "失败") << endl;
+        cout << "顾客 " << customerId << ": 关闭连接" << endl;
     }
     shutdown(sock, SHUT_RDWR);
     close(sock);
@@ -138,4 +178,4 @@ int main() {
     }
 
     return 0;
-} 
+}

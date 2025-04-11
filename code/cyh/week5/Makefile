@@ -2,14 +2,14 @@
 
 # Compiler settings
 CXX      := g++
-CXXFLAGS := -Wall -Wextra -std=c++17
+CXXFLAGS := -Wall -Wextra -std=c++17 -pthread
 LDFLAGS  := 
 
 # Targets
 TARGETS :=  client server
 
 # Source files
-
+ 
 SRC_CLIENT := client.cpp
 SRC_SERVER := server.cpp
 

@@ -224,7 +224,8 @@ int main() {
     loadInventory("inventory.txt");
     // 创建服务器套接字
     int serverFd = socket(AF_INET, SOCK_STREAM, 0);
-    server_init(serverFd); 
+    server_init(serverFd);
+    
     server_loop(serverFd);
     return 0;
 }
