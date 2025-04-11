@@ -106,7 +106,7 @@ void logOrder(const vector<int>& order, bool success, const map<string, int>& up
     ofstream logfile("kitchen.log", ios::app); //append模式打开日志文件
     
     // 记录时间
-    logfile << getCurrentTime() << " ";
+    logfile << getCurrentTime() << " "; 
     
     // 记录订单内容
     for (size_t i = 0; i < order.size(); ++i) {
@@ -129,48 +129,52 @@ void logOrder(const vector<int>& order, bool success, const map<string, int>& up
     logfile << "]" << endl;
     
     logfile.close();
-}
+} 
+
 
 bool processOrder(const vector<int>& order, map<string, int>& updates) {
     lock_guard<mutex> lock(inventory_mutex);
     bool allSuccess = true;
+    bool hasInvalidID = false;
 
-    // 检查所有食物ID是否有效
+    // 首先将整个inventory复制到updates
+    updates = inventory;
+
+    map<string, int> totalDemand;
+    // 检查ID有效性并收集食材需求
     for (int id : order) {
         if (foods.find(id) == foods.end()) {
-            return false;
+            hasInvalidID = true; 
+            continue;
         }
-    }
-
-    // 收集总需求
-    map<string, int> totalDemand;
-    for (int id : order) {
         const FoodItem& item = foods[id];
         for (const string& ing : item.ingredients) {
             totalDemand[ing]++;
         }
     }
 
-    // 检查库存是否足够
-    for (const auto& [ing, demand] : totalDemand) {
-        if (inventory.find(ing) == inventory.end() || inventory[ing] < demand) {
-            allSuccess = false;
-            break;
+    // 存在无效ID则订单失败
+    if (hasInvalidID) {
+        allSuccess = false;
+    } else {
+        // 检查库存是否足够
+        for (const auto& [ing, demand] : totalDemand) {
+            if (inventory.find(ing) == inventory.end() || inventory[ing] < demand) {
+                allSuccess = false;
+                break;
+            }
         }
     }
 
-    // 记录原始库存状态
-    for (const auto& [ing, _] : totalDemand) {
-        updates[ing] = inventory[ing];
-    }
-
+    // 如果订单可以处理，更新库存和updates中对应的值
     if (allSuccess) {
-        // 扣减库存
+        // 扣减库存并更新updates
         for (const auto& [ing, demand] : totalDemand) {
             inventory[ing] -= demand;
-            updates[ing] = inventory[ing]; // 更新记录为扣减后的库存
+            updates[ing] = inventory[ing]; // 更新对应的值
         }
     }
+    // 如果订单不能处理，updates仍然包含完整的inventory快照
 
     return allSuccess;
 }
@@ -201,11 +205,7 @@ void handleClient(int clientSocket) {
     close(clientSocket);
 }
 
-int main() { 
-    loadFoods("foods.txt");
-    loadInventory("inventory.txt");
-    // 创建服务器套接字
-    int serverFd = socket(AF_INET, SOCK_STREAM, 0);
+void server_init(int serverFd) {
     sockaddr_in address{};
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
@@ -213,11 +213,10 @@ int main() {
 
     bind(serverFd, (struct sockaddr*)&address, sizeof(address));
     listen(serverFd, 5);
-
     cout << "8080端口启动成功" << endl;
+}
 
-
-    
+void server_loop(int serverFd) {
     while (true) {
         sockaddr_in clientAddr{};
         socklen_t addrLen = sizeof(clientAddr);
@@ -227,9 +226,17 @@ int main() {
             cerr << "接受失败" << endl;
             continue;
         }
-
         thread(handleClient, clientSocket).detach(); //分离线程处理客户端请求
-    }
+    }}
 
+
+int main() { 
+    loadFoods("foods.txt");
+    loadInventory("inventory.txt");
+    // 创建服务器套接字
+    int serverFd = socket(AF_INET, SOCK_STREAM, 0);
+    server_init(serverFd);
+    
+    server_loop(serverFd);
     return 0;
 }
