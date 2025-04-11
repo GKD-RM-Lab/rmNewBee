@@ -135,28 +135,18 @@ void logOrder(const vector<int>& order, bool success, const map<string, int>& up
 bool processOrder(const vector<int>& order, map<string, int>& updates) {
     lock_guard<mutex> lock(inventory_mutex);
     bool allSuccess = true;
-    bool hasInvalidID = false;
 
-    // 首先将整个inventory复制到updates
     updates = inventory;
 
     map<string, int> totalDemand;
-    // 检查ID有效性并收集食材需求
+    // 收集食材需求
     for (int id : order) {
-        if (foods.find(id) == foods.end()) {
-            hasInvalidID = true; 
-            continue;
-        }
         const FoodItem& item = foods[id];
         for (const string& ing : item.ingredients) {
             totalDemand[ing]++;
         }
     }
 
-    // 存在无效ID则订单失败
-    if (hasInvalidID) {
-        allSuccess = false;
-    } else {
         // 检查库存是否足够
         for (const auto& [ing, demand] : totalDemand) {
             if (inventory.find(ing) == inventory.end() || inventory[ing] < demand) {
@@ -164,7 +154,6 @@ bool processOrder(const vector<int>& order, map<string, int>& updates) {
                 break;
             }
         }
-    }
 
     // 如果订单可以处理，更新库存和updates中对应的值
     if (allSuccess) {
