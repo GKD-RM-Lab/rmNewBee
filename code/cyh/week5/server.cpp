@@ -27,6 +27,7 @@ map<int, FoodItem> foods;
 map<string, int> inventory;
 mutex inventory_mutex;
 mutex log_mutex;
+mutex cout_mutex;
 
 //读取食材信息的分割函数
 vector<string> split(const string &s, char delimiter) {
@@ -147,14 +148,13 @@ bool processOrder(const vector<int>& order, map<string, int>& updates) {
         }
     }
 
-        // 检查库存是否足够
-        for (const auto& [ing, demand] : totalDemand) {
-            if (inventory.find(ing) == inventory.end() || inventory[ing] < demand) {
-                allSuccess = false;
-                break;
-            }
+    // 检查库存是否足够
+    for (const auto& [ing, demand] : totalDemand) {
+        if (inventory.find(ing) == inventory.end() || inventory[ing] < demand) {
+            allSuccess = false;
+            break;
         }
-
+    }
     // 如果订单可以处理，更新库存和updates中对应的值
     if (allSuccess) {
         // 扣减库存并更新updates
@@ -171,6 +171,9 @@ bool processOrder(const vector<int>& order, map<string, int>& updates) {
 void handleClient(int clientSocket) {
     char buffer[1024] = {0};
     int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+
+
+
     if (bytesRead <= 0) {
         close(clientSocket);
         return;
@@ -181,6 +184,8 @@ void handleClient(int clientSocket) {
     string item;
     // 解析客户端请求
     while (getline(ss, item, ',')) {
+        // lock_guard<mutex> lock(cout_mutex);
+        // cout << "Received item: " << item << endl;
        order.push_back(stoi(item));
     } 
 
@@ -195,6 +200,12 @@ void handleClient(int clientSocket) {
 }
 
 void server_init(int serverFd) {
+    int opt = 1;
+    if (setsockopt(serverFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+        cerr << "设置 SO_REUSEADDR 失败" << endl;
+        exit(EXIT_FAILURE);
+    }
+
     sockaddr_in address{};
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
