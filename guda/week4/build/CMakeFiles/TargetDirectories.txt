@@ -1,0 +1,3 @@
+E:/code/gkd/rmNewBee/rmNewBee/guda/week4/build/CMakeFiles/Task_Management_Class.dir
+E:/code/gkd/rmNewBee/rmNewBee/guda/week4/build/CMakeFiles/edit_cache.dir
+E:/code/gkd/rmNewBee/rmNewBee/guda/week4/build/CMakeFiles/rebuild_cache.dir
