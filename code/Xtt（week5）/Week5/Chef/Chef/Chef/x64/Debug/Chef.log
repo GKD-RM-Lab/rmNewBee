@@ -1,0 +1,5 @@
+﻿  Chef.cpp
+C:\Users\xtt\source\repos\week5\chef\Chef.cpp(133,65): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\xtt\source\repos\week5\chef\Chef.cpp(139,65): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\xtt\source\repos\week5\chef\Chef.cpp(156,1): warning C4715: “Chef::cooking”: 不是所有的控件路径都返回值
+  Chef.vcxproj -> C:\Users\xtt\source\repos\Chef\Chef\x64\Debug\Chef.exe

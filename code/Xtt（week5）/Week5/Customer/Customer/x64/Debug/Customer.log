@@ -1,0 +1,7 @@
+﻿  Customer.cpp
+C:\Users\xtt\source\repos\Customer\Customer\Customer.cpp(69,50): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\xtt\source\repos\Customer\Customer\Customer.cpp(84,17): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+  main.cpp
+C:\Users\xtt\source\repos\Customer\Customer\main.cpp(9,20): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+  正在生成代码...
+  Customer.vcxproj -> C:\Users\xtt\source\repos\Customer\x64\Debug\Customer.exe

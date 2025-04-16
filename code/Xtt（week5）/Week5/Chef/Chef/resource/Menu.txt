@@ -1,0 +1,6 @@
+1 BeefFriedRice,  rice  beef  egg  onion
+2 ChickenChowMein,  noodles  egg  chicken 
+3 BeefRamen,  noodles   beef   onion   pepper 
+4 VegetableOmelet, egg  flour  vegetable  onion 
+5 ChickenOverRice,  rice  chicken  egg  vegetable 
+6 MexicanChickenBurrito,  flour  chicken  onion  vegetable  pepper
