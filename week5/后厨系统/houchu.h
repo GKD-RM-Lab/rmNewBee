@@ -1,11 +1,4 @@
-#ifndef _HOUCHU_H_
-#define _HOUCHU_H_
-#include<stdio.h>
-#include<unistd.h>
-#include<arpa/inet.h>
-#include<pthread.h>
-#include<string.h>
-#include<math.h>
+#pragma once
 #include"houchu.cpp"
 //判断是否充足
 void read(int linenum);
@@ -16,4 +9,3 @@ void write(int linenum);
 //写log文件
 void log(int a);
 void* working(void* arg);
-#endif

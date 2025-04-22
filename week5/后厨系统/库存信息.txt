@@ -1,0 +1,9 @@
+rice    10 
+beef    3 
+egg     17
+onion   1 
+noodles 5 
+chicken 1 
+pepper  3 
+flour   2 
+green   1

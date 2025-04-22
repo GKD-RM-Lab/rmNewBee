@@ -1,66 +1,70 @@
-#include<stdio.h>
+#include<iostream>
 #include<unistd.h>
 #include<arpa/inet.h>
-#include<pthread.h>
-#include<string.h>
+#include<thread>
+#include<string>
 #include<math.h>
-#include<stdlib.h>
+#include<mutex>
+#include<atomic>
+#include<fstream>
 struct Sockinfo{
     struct sockaddr_in addr;
     int fd;
 };
-int count=0;
+std::atomic<int> count(0);
 //判断是否充足
 void read(int linenum){//剩余数量固定在第九列之后 
-    FILE*fp=fopen("库存信息.txt","r");
-        if(fp==NULL){
+    std::ifstream ifs("库存信息.txt");
+        if(!ifs.is_open()){
             perror("无法打开文件");
             return;
         }
-    char line[100];
+    std::string line;
     int currentline=1;
-    while(fgets(line,sizeof(line),fp)!=NULL){
+    while(std::getline(ifs,line)){
         if(currentline==linenum){
             if(line[8]==0){
-                printf("库存不足");
+                std::cout<<"库存不足";
                 log(linenum);
                 count++;
             }
             else{
-                printf("库存充足");
+                std::cout<<"库存充足";
             }
             break;
         }
         currentline++;
     }
-    fclose(fp);
+    ifs.close();
 }
 //判断食物信息对应哪种
 int *judge(int linenum){
-     FILE*fp=fopen("食物信息.txt","r");
-     if(fp==NULL){
-        perror("无法打开文件");
-        return NULL;
-     }
-     int *food=(int *)malloc(sizeof(int)*20);
+     std::ifstream ifs("食物信息.txt");
+     if(!ifs.is_open()){
+            perror("无法打开文件");
+            return NULL;
+        }
+     int *food=(int *)malloc(sizeof(int)*100);
         if(food==NULL){
         perror("内存分配失败");
-        fclose(fp);
+        ifs.close();
         return NULL;
      }
      int x=0;
-     while(x<20){
+     while(x<100){
         food[x]=-1;
         x++;
      }
-    char line[100];
+    std::string line;
     int currentline=1;
-    while(fgets(line,sizeof(line),fp)!=NULL){
+    while(std::getline(ifs,line)){
         if(currentline==linenum+1){//需要的食材在下一行
             int i=0,j=0;
             while(1){
-                if(line[i]!='o'){
-                    food[j]=line[i];
+                if(line[i]!='o'&&i<line.size()){
+                    if(j<100){
+                    food[j]=static_cast<int>(line[i]);
+                    }
                     j++;
                     i=i+2;
                 }
@@ -71,21 +75,21 @@ int *judge(int linenum){
         }
         currentline++;
     }
-    fclose(fp);
+    ifs.close();
     return food; 
 }
 //用去某种食材
 void write(int linenum){
-    FILE*fp=fopen("库存信息.txt","r+");
-    if(fp==NULL){
-        perror("无法打开文件");
-        return ;
-    }
-    char line[100];
+    std::fstream fs("库存信息.txt",std::ios::in|std::ios::out);
+    if(!fs.is_open()){
+            perror("无法打开文件");
+            return;
+        }
+    std::string line;
     int currentline=0;
-    while(fgets(line,sizeof(line),fp)!=NULL){
+    while(std::getline(fs,line)){
         if(currentline==linenum){
-            fseek(fp,9,SEEK_SET);
+            fs.seekg(9,std::ios::cur);
             int a=9;
             while(1){        //判断是几位数
                 if(line[a]==' ') break;
@@ -101,36 +105,36 @@ void write(int linenum){
                 else break;
             }
             b--;
-            fseek(fp,9,SEEK_SET);
-            fprintf(fp,"%d",b);
+            fs.seekg(9,std::ios::cur);
+            fs<<b;
             break;
         }
         currentline++;
     }
-    fclose(fp);
+    fs.close();
 }
 //写log文件
 void log(int a){
-    FILE*fp=fopen("菜单.log","a");
-        if(fp==NULL){
+    std::ofstream ofs("菜单.log",std::ios::app);
+        if(!ofs.is_open()){
             perror("无法打开文件");
             return;
         }
-    fprintf(fp,"第%d行食物库存不足",a);
-    fclose(fp);
+    ofs<<"第"<<a<<"行食物不足";
+    ofs.close();
     printf("写入成功");
 }
+std::mutex houchu_lock;
 void* working(void* arg)
 {
     struct Sockinfo* pinfo=(struct Sockinfo*)arg;
     char ip[32];
-    pthread_mutex_t houchu_lock = PTHREAD_MUTEX_INITIALIZER;
-    pthread_mutex_lock(&houchu_lock);
     while(1){
+        houchu_lock.lock();
         int *buff=(int *)malloc(sizeof(int));
         if(buff==NULL){
             perror("内存分配失败");
-            pthread_mutex_unlock(&houchu_lock);
+            houchu_lock.unlock();
         close(pinfo->fd);
         pinfo->fd=-1;
         return NULL;
@@ -141,7 +145,7 @@ void* working(void* arg)
             int *foods=judge(file);
             if(foods==NULL){
                 free(buff);
-                pthread_mutex_unlock(&houchu_lock);
+                houchu_lock.unlock();
                 close(pinfo->fd);
                 pinfo->fd=-1;
                 return NULL;
@@ -173,7 +177,7 @@ void* working(void* arg)
                 int *foods=judge(file);
                 if(foods==NULL){
                     free(buff);
-                    pthread_mutex_unlock(&houchu_lock);
+                    houchu_lock.unlock();
                     close(pinfo->fd);
                     pinfo->fd=-1;
                     return NULL;
@@ -200,7 +204,7 @@ void* working(void* arg)
         }
         free(buff);
     }
-    pthread_mutex_unlock(&houchu_lock);
+    houchu_lock.unlock();
     close(pinfo->fd);
     pinfo->fd=-1;
     return NULL;

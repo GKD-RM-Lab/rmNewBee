@@ -1,13 +1,11 @@
-#include<stdio.h>
-#include<unistd.h>
 #include<iostream>
 #include<arpa/inet.h>
-#include<pthread.h>
+#include<thread>
 #include<string.h>
 #include<math.h>
+#include<mutex>
 #include"houchu.h"
 int main(){
-    std::cout<<"1";
     //创建套接字
     int fd=socket(AF_INET,SOCK_STREAM,0);
     if(fd==-1){
@@ -49,15 +47,10 @@ int main(){
             }
         }
         int cfd=accept(fd,(struct sockaddr*)&pinfo->addr,&addrlen);
-        printf("收到客户端连接！\n");  // 在 accept() 成功后添加
+        std::cout<<"收到客户端连接！";  // 在 accept() 成功后添加
         pinfo->fd=cfd;
-    pthread_t tid;
-    int creat=pthread_create(&tid,NULL,working,pinfo);
-    if(creat!=0){
-        perror("pthread_create");
-        continue;
-    }
-    pthread_detach(tid);
+    std::thread tid(working,pinfo);
+    tid.detach();
     }
     close(fd);
     return 0;

@@ -1,14 +1,10 @@
-#include<stdio.h>
-#include<stdlib.h>
 #include<iostream>
 #include<time.h>
 #include<unistd.h>
 #include<arpa/inet.h>
-#include<string.h>
-#include<pthread.h>
+#include<thread>
 #include"guke.h"
 int main(){
-    std::cout<<"1";
     //向working函数传参做初始化
     int max=sizeof(infos)/sizeof(infos[0]);
     for(int i=0;i<max;i++){
@@ -35,7 +31,7 @@ int main(){
         struct sockaddr_in saddr;
         saddr.sin_family=AF_INET;
         saddr.sin_port=htons(30000);
-        inet_pton(AF_INET,"192.168.43.5",&saddr.sin_addr.s_addr);
+        inet_pton(AF_INET,"127.0.0.1",&saddr.sin_addr.s_addr);
         int ret=connect(cfd,(struct sockaddr*)&saddr,sizeof(saddr));
         if(ret==-1){
             perror("connect");
@@ -43,15 +39,9 @@ int main(){
             return -1;
         }
         pinfo->fd=cfd;
-        working(pinfo);
-        pthread_t tid;
-        int creat=pthread_create(&tid,NULL,working,pinfo);
-        if(creat!=0){
-        perror("pthread_create");
+        std::thread tid(working,pinfo);
+        tid.detach();
         return -1;
     }
-        pthread_detach(tid);
-        return 0;
-    }
-    
+    return 0;
 }
