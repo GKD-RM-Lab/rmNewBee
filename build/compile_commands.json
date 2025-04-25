@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/nyiuu/workplace/rmNewBee/build",
+  "command": "/usr/bin/g++   -g -std=gnu++20 -o CMakeFiles/week6.dir/trie.cpp.o -c /home/nyiuu/workplace/rmNewBee/code/cyh/week6/code/trie.cpp",
+  "file": "/home/nyiuu/workplace/rmNewBee/code/cyh/week6/code/trie.cpp",
+  "output": "CMakeFiles/week6.dir/trie.cpp.o"
+},
+{
+  "directory": "/home/nyiuu/workplace/rmNewBee/build",
+  "command": "/usr/bin/g++   -g -std=gnu++20 -o CMakeFiles/week6.dir/test.cpp.o -c /home/nyiuu/workplace/rmNewBee/code/cyh/week6/code/test.cpp",
+  "file": "/home/nyiuu/workplace/rmNewBee/code/cyh/week6/code/test.cpp",
+  "output": "CMakeFiles/week6.dir/test.cpp.o"
+}
+]

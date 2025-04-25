@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/week6.dir/trie.cpp.o CMakeFiles/week6.dir/test.cpp.o -o week6 
