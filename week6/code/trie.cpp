@@ -14,6 +14,7 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <numeric>
 #include <stdexcept>
 #include <string_view>
 
@@ -94,12 +95,23 @@ namespace bustub {
      * @return 如果该键不存在，返回原始的字典树。否则，返回新的字典树。
      */
     auto Trie::Remove(std::string_view key) const -> Trie {
-        if (key.empty() || !root_) {
+        if (!root_) {
             return *this;
         }
-
         auto NewRoot = root_->Clone();
         auto Now = NewRoot.get();
+
+        if (key.empty()) {
+            if (!root_->is_value_node_) {
+                return *this;
+            }
+            if (root_->children_.empty()) {
+                return Trie();
+            }
+            auto NewRoot2 = std::make_shared<TrieNode>(root_->children_);
+            return Trie(NewRoot2);
+        }
+
         std::vector<std::pair<TrieNode*, char>> Path;
         for (char c : key) {
             auto it = Now->children_.find(c);

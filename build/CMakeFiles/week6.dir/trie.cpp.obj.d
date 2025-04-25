@@ -211,4 +211,7 @@ CMakeFiles/week6.dir/trie.cpp.obj: \
  C:/Users/qq327/Desktop/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_bvector.h \
  C:/Users/qq327/Desktop/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/vector.tcc \
  C:/Users/qq327/Desktop/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cassert \
- C:/Users/qq327/Desktop/MinGW/x86_64-w64-mingw32/include/assert.h
+ C:/Users/qq327/Desktop/MinGW/x86_64-w64-mingw32/include/assert.h \
+ C:/Users/qq327/Desktop/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/numeric \
+ C:/Users/qq327/Desktop/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_numeric.h \
+ C:/Users/qq327/Desktop/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/pstl/glue_numeric_defs.h
