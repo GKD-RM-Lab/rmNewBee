@@ -4,9 +4,9 @@
 //
 // trie.cpp
 //
-// Identification: src/primer/trie.cpp
+// 标识：src/primer/trie.cpp
 //
-// Copyright (c) 2015-2025, Carnegie Mellon University Database Group
+// 版权所有 (c) 2015 - 2025，卡内基梅隆大学数据库组
 //
 //===----------------------------------------------------------------------===//
 
@@ -19,71 +19,155 @@
 
 namespace bustub {
 
-	/**
-	 * @brief Get the value associated with the given key.
-	 * 1. If the key is not in the trie, return nullptr.
-	 * 2. If the key is in the trie but the type is mismatched, return nullptr.
-	 * 3. Otherwise, return the value.
-	 */
-	template <class T>
-	auto Trie::Get(std::string_view key) const -> const T * {
-	  throw std::runtime_error("Trie::Get is not implemented.");
-	
-	  // You should walk through the trie to find the node corresponding to the key. If the node doesn't exist, return
-	  // nullptr. After you find the node, you should use `dynamic_cast` to cast it to `const TrieNodeWithValue<T> *`. If
-	  // dynamic_cast returns `nullptr`, it means the type of the value is mismatched, and you should return nullptr.
-	  // Otherwise, return the value.
-	}
-	
-	/**
-	 * @brief Put a new key-value pair into the trie. If the key already exists, overwrite the value.
-	 * @return the new trie.
-	 */
-	template <class T>
-	auto Trie::Put(std::string_view key, T value) const -> Trie {
-	  // Note that `T` might be a non-copyable type. Always use `std::move` when creating `shared_ptr` on that value.
-	  throw std::runtime_error("Trie::Put is not implemented.");
-	
-	  // You should walk through the trie and create new nodes if necessary. If the node corresponding to the key already
-	  // exists, you should create a new `TrieNodeWithValue`.
-	}
-	
-	/**
-	 * @brief Remove the key from the trie.
-	 * @return If the key does not exist, return the original trie. Otherwise, returns the new trie.
-	 */
-	auto Trie::Remove(std::string_view key) const -> Trie {
-	  throw std::runtime_error("Trie::Remove is not implemented.");
-	
-	  // You should walk through the trie and remove nodes if necessary. If the node doesn't contain a value any more,
-	  // you should convert it to `TrieNode`. If a node doesn't have children any more, you should remove it.
-	}
-	
-	// Below are explicit instantiation of template functions.
-	//
-	// Generally people would write the implementation of template classes and functions in the header file. However, we
-	// separate the implementation into a .cpp file to make things clearer. In order to make the compiler know the
-	// implementation of the template functions, we need to explicitly instantiate them here, so that they can be picked up
-	// by the linker.
-	
-	template auto Trie::Put(std::string_view key, uint32_t value) const -> Trie;
-	template auto Trie::Get(std::string_view key) const -> const uint32_t *;
-	
-	template auto Trie::Put(std::string_view key, uint64_t value) const -> Trie;
-	template auto Trie::Get(std::string_view key) const -> const uint64_t *;
-	
-	template auto Trie::Put(std::string_view key, std::string value) const -> Trie;
-	template auto Trie::Get(std::string_view key) const -> const std::string *;
-	
-	// If your solution cannot compile for non-copy tests, you can remove the below lines to get partial score.
-	
-	using Integer = std::unique_ptr<uint32_t>;
-	
-	template auto Trie::Put(std::string_view key, Integer value) const -> Trie;
-	template auto Trie::Get(std::string_view key) const -> const Integer *;
-	
-	template auto Trie::Put(std::string_view key, MoveBlocked value) const -> Trie;
-	template auto Trie::Get(std::string_view key) const -> const MoveBlocked *;
-	
-	}  // namespace bustub
-	
+    /**
+     * @brief 获取与给定键相关联的值。
+     * 1. 如果该键不在字典树中，返回 nullptr。
+     * 2. 如果该键在字典树中但类型不匹配，返回 nullptr。
+     * 3. 否则，返回该值。
+     */
+    template <class T>
+    auto Trie::Get(std::string_view key) const -> const T * {
+        auto Now = root_;
+        if (!Now) {
+            return nullptr;
+        }
+        
+        for (const char c : key) {
+            auto it = Now->children_.find(c);
+            if (it == Now->children_.end()) {
+                return nullptr;
+            }
+            Now = it->second;
+        }
+
+        auto ValueNode = dynamic_cast<const TrieNodeWithValue<T> *>(Now.get());
+        if (!ValueNode) {
+            return nullptr;
+        }
+        
+        return ValueNode->value_.get();
+    }
+
+
+    /**
+     * @brief 向字典树中插入一个新的键值对。如果该键已经存在，则覆盖其对应的值。
+     * @return 新的字典树。
+     */
+    template <class T>
+    auto Trie::Put(std::string_view key, T value) const -> Trie {
+        auto NewRoot = root_ ? root_->Clone() : std::make_unique<TrieNode>();
+        TrieNode *Now = NewRoot.get();
+
+        for (size_t i = 0; i < key.length(); i++) {
+            char c = key[i];
+            auto &ChildRef = Now->children_[c];
+            if (ChildRef) {
+                ChildRef = std::shared_ptr<const TrieNode>(ChildRef->Clone());
+            } 
+            else {
+                ChildRef = std::make_shared<TrieNode>();
+            }
+            Now = const_cast<TrieNode *>(static_cast<const TrieNode *>(ChildRef.get()));
+        }
+
+        auto ValueNode = std::make_shared<TrieNodeWithValue<T>>(
+            Now->children_,
+            std::make_shared<T>(std::move(value))
+        );
+
+        if (key.empty()) {
+            NewRoot = std::unique_ptr<TrieNode>(ValueNode->Clone());
+        } 
+        else {
+            auto Father = NewRoot.get();
+            for (size_t i = 0; i < key.length() - 1; i++) {
+                Father = const_cast<TrieNode *>(static_cast<const TrieNode *>(Father->children_[key[i]].get()));
+            }
+            Father->children_[key.back()] = ValueNode;
+        }
+
+        return Trie(std::move(NewRoot));
+    }
+
+    /**
+     * @brief 从字典树中移除指定的键。
+     * @return 如果该键不存在，返回原始的字典树。否则，返回新的字典树。
+     */
+    auto Trie::Remove(std::string_view key) const -> Trie {
+        if (key.empty() || !root_) {
+            return *this;
+        }
+
+        auto NewRoot = root_->Clone();
+        auto Now = NewRoot.get();
+        std::vector<std::pair<TrieNode*, char>> Path;
+        for (char c : key) {
+            auto it = Now->children_.find(c);
+            if (it == Now->children_.end()) {
+                return *this;
+            }
+
+            it->second = std::shared_ptr<const TrieNode>(it->second->Clone());
+            Path.push_back({Now, c});
+            Now = const_cast<TrieNode *>(it->second.get());
+        }
+
+        if (!Now->is_value_node_) {
+            return *this;
+        }
+
+        auto NewNode = std::make_shared<TrieNode>(Now->children_);
+        if (Path.empty()) {
+            NewRoot = std::unique_ptr<TrieNode>(NewNode->Clone());
+            return *this;
+        } 
+        else {
+            Path.back().first->children_[Path.back().second] = NewNode;
+        }
+
+        for (int i = Path.size() - 1; i >= 0; --i) {
+            TrieNode* Parent = Path[i].first;
+            char Edge = Path[i].second;
+            auto& Ptr = Parent->children_[Edge];
+            if (Ptr->children_.empty() && !Ptr->is_value_node_) {
+                Parent->children_.erase(Edge);
+            } 
+            else {
+                break;
+            }
+        }
+
+        if (NewRoot->children_.empty() && !NewRoot->is_value_node_) {
+            return Trie();
+        }
+        
+        return Trie(std::move(NewRoot));
+    }
+
+    // 以下是模板函数的显式实例化。
+    //
+    // 一般来说，人们会在头文件中编写模板类和函数的实现。然而，我们
+    // 将实现分离到一个 .cpp 文件中，以使内容更清晰。为了让编译器了解
+    // 模板函数的实现，我们需要在这里显式地实例化它们，以便链接器能够
+    // 找到它们。
+
+    template auto Trie::Put(std::string_view key, uint32_t value) const -> Trie;
+    template auto Trie::Get(std::string_view key) const -> const uint32_t *;
+
+    template auto Trie::Put(std::string_view key, uint64_t value) const -> Trie;
+    template auto Trie::Get(std::string_view key) const -> const uint64_t *;
+
+    template auto Trie::Put(std::string_view key, std::string value) const -> Trie;
+    template auto Trie::Get(std::string_view key) const -> const std::string *;
+
+    // 如果你的解决方案无法通过不可复制测试的编译，你可以删除以下几行以获得部分分数。
+
+    using Integer = std::unique_ptr<uint32_t>;
+
+    template auto Trie::Put(std::string_view key, Integer value) const -> Trie;
+    template auto Trie::Get(std::string_view key) const -> const Integer *;
+
+    template auto Trie::Put(std::string_view key, MoveBlocked value) const -> Trie;
+    template auto Trie::Get(std::string_view key) const -> const MoveBlocked *;
+
+}  // namespace bustub

@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\week6.dir/objects.a
+C:\Users\qq327\Desktop\MinGW\bin\ar.exe qc CMakeFiles\week6.dir/objects.a @CMakeFiles\week6.dir\objects1.rsp
+C:\Users\qq327\Desktop\MinGW\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\week6.dir/objects.a -Wl,--no-whole-archive -o week6.exe -Wl,--out-implib,libweek6.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\week6.dir\linkLibs.rsp

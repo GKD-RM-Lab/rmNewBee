@@ -1,0 +1,14 @@
+[
+{
+  "directory": "C:/Users/qq327/Desktop/rmNewBee/build",
+  "command": "C:\\Users\\qq327\\Desktop\\MinGW\\bin\\g++.exe   -g -std=gnu++20 -o CMakeFiles\\week6.dir\\trie.cpp.obj -c C:\\Users\\qq327\\Desktop\\rmNewBee\\week6\\code\\trie.cpp",
+  "file": "C:/Users/qq327/Desktop/rmNewBee/week6/code/trie.cpp",
+  "output": "CMakeFiles/week6.dir/trie.cpp.obj"
+},
+{
+  "directory": "C:/Users/qq327/Desktop/rmNewBee/build",
+  "command": "C:\\Users\\qq327\\Desktop\\MinGW\\bin\\g++.exe   -g -std=gnu++20 -o CMakeFiles\\week6.dir\\test.cpp.obj -c C:\\Users\\qq327\\Desktop\\rmNewBee\\week6\\code\\test.cpp",
+  "file": "C:/Users/qq327/Desktop/rmNewBee/week6/code/test.cpp",
+  "output": "CMakeFiles/week6.dir/test.cpp.obj"
+}
+]
