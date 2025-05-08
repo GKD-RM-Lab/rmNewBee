@@ -147,7 +147,6 @@ class Trie {
   auto Put(std::string_view key, T value) const -> Trie;
 
   // 根据给定的键删除数据
-  template <class T>
   auto Remove(std::string_view key) const -> Trie;
 
   // 获取字典树的根节点，仅应在测试用例中使用。

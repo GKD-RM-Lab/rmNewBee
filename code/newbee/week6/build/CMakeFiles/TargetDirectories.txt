@@ -1,0 +1,3 @@
+/home/wly/vscode/rmNewBee/code/newbee/week6/build/CMakeFiles/week6.dir
+/home/wly/vscode/rmNewBee/code/newbee/week6/build/CMakeFiles/edit_cache.dir
+/home/wly/vscode/rmNewBee/code/newbee/week6/build/CMakeFiles/rebuild_cache.dir

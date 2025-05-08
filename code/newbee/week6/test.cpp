@@ -63,7 +63,7 @@ TEST(TrieTest, BasicPutGetTest) {
 }
 
 TEST(TrieTest, PutGetOnePath) {
-  auto triebustub = Trie();
+  auto trie = Trie();
   trie = trie.Put<uint32_t>("111", 111);
   trie = trie.Put<uint32_t>("11", 11);
   trie = trie.Put<uint32_t>("1111", 1111);
